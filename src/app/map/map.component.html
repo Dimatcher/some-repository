@@ -1,0 +1,34 @@
+<agm-map [latitude]="lat_center" [longitude]="lng_center" [mapTypeControl]="true" [zoom]="zoom" [scaleControl]="true" (mapReady)="onMapReady($event)" (zoomChange)="onZoomChange($event)" (boundsChange)="onBoundsChange($event)">
+  <div *ngFor = "let car of cars">
+    <div *ngIf="zoom >= 14">
+      <agm-circle *ngIf="car.coords.hdop <= 10" [latitude]="car.coords.lat" [longitude]="car.coords.lng" [radius]="car.coords.hdop*0.5" [fillOpacity]="0.7" [fillColor]="'skyblue'"></agm-circle>
+      <agm-circle *ngIf="car.coords.hdop > 10 && car.coords.hdop <= 20" [latitude]="car.coords.lat" [longitude]="car.coords.lng" [radius]="car.coords.hdop*0.75" [fillOpacity]="0.7" [fillColor]="'skyblue'"></agm-circle>
+      <agm-circle *ngIf="car.coords.hdop > 20" [latitude]="car.coords.lat" [longitude]="car.coords.lng" [radius]="car.coords.hdop" [fillOpacity]="0.7" [fillColor]="'skyblue'"></agm-circle>
+    </div>
+    <div *ngIf="car.coords.lat > lat_min && car.coords.lat < lat_max && car.coords.lng > lng_min && car.coords.lng < lng_max || zoom < 4">
+      <agm-marker *ngIf="car.status == 'on'" [latitude]="car.coords.lat" [longitude]="car.coords.lng">
+        <agm-info-window>ID: {{ car.id }}<br/>Model: {{ car.model }}<br/>Status: {{ car.status }}</agm-info-window>
+      </agm-marker>
+      <agm-marker *ngIf="car.status == 'off'" [latitude]="car.coords.lat" [longitude]="car.coords.lng" [opacity]="0.5">
+        <agm-info-window>ID: {{ car.id }}<br/>Model: {{ car.model }}<br/>Status: {{ car.status }}</agm-info-window>
+      </agm-marker>
+    </div>
+  </div>
+</agm-map>
+<div class="info-col">
+  <div class="inner-text">
+    <div *ngFor="let car of cars">
+      <div *ngIf="car.coords.lat > lat_min && car.coords.lat < lat_max && car.coords.lng > lng_min && car.coords.lng < lng_max || zoom < 4" (click)="onCarClicked(car.coords.lat, car.coords.lng)">
+        <h6 id="car-name">{{ car.id }}:</h6>
+        <table width="100%" cellspacing="0" cellpadding="0">
+          <tr><td width="45px">Lat:</td><td>{{ car.coords.lat.toFixed(6) }}</td></tr>
+          <tr><td width="45px">Lng:</td><td>{{ car.coords.lng.toFixed(6) }}</td></tr>
+          <tr><td width="45px">Alt:</td><td>{{ car.coords.alt }}</td></tr>
+          <tr><td width="45px">Spd:</td><td>{{ car.coords.spd }}</td></tr>
+          <tr><td width="45px">Course:</td><td>{{ car.coords.course }}</td></tr>
+          <tr><td width="45px">Hdop:</td><td>{{ car.coords.hdop }}</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
