@@ -45,16 +45,8 @@ export class MapComponent implements OnInit {
 
   onMapReady(event){
     var self = this;
-    var i = 25;
     setInterval(function(){
-      if(i > 30){
-        i = 25;
-      }
-      self.cars[0].coords.lng = i;
-      self.cars[2].coords.lat = i;
-      self.cars[4].coords.lat = i;
-      self.cars[4].coords.lng = i;
-      i+=0.1;
+      self.getDate();
     }, 1000);
   }
   
